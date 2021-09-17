@@ -3,6 +3,8 @@ const choices = Array.from(document.querySelectorAll('.choice-text'));
 const progressText = document.querySelector('#progressText');
 const scoreText = document.querySelector('#score');
 const progressBarFull = document.querySelector('#progressBarFull');
+const timeH = document.querySelector('#timer');
+let timeSecond = 20;
 
 let currentQuestion = {};
 let acceptingAnswers = true;
@@ -10,37 +12,58 @@ let score = 0;
 let questionCounter = 0;
 let availableQuestions = [];
 
+displayTime(timeSecond);
+
+const countDown = setInterval (()=> {
+    timeSecond--;
+    displayTime(timeSecond);
+    if(timeSecond <= 0 || timeSecond < 1) {
+        endTime();
+        clearInterval(countDown);
+    }
+},1000)
+
+function displayTime(second){
+    const min = Math.floor(second / 60);
+    const sec = Math.floor(second % 60);
+    timeH.innerHTML = `${min < 10 ? '0': ''}${min}:${sec < 10 ? '0': ''}${sec}`;
+}
+function endTime() {
+    alert("You Ran Out Of Time!")
+    localStorage.setItem('mostRecentScore', score)
+    return window.location.assign('./end.html')
+}
 let questions = [
     {
-        question: 'What is 2 + 2?',
-        choice1: '2',
-        choice2: '4',
-        choice3: '21',
-        choice4: '17',
+        question: 'What is not a JavaScript Data Type?',
+        choice1: 'Number',
+        choice2: 'Function',
+        choice3: 'String',
+        choice4: 'Boolean',
         answer: 2,
     },
     {
-        question: 'The tallest building in the world is located in which city?',
-        choice1: 'Dubai',
-        choice2: 'New York',
-        choice3: 'Shanghai',
+        question: 'What is DOM?',
+        choice1: 'Differential Object Manipulator',
+        choice2: 'Dynamic Operator Model',
+        choice3: 'Document Object Model',
         choice4: 'None of the above',
-        answer: 1,
-    },
-    {
-        question: 'What percent of American adults believe that chocolate milk comes from brown cows?',
-        choice1: '20%',
-        choice2: '18%',
-        choice3: '7%',
-        choice4: '33%',
         answer: 3,
     },
     {
-        question: 'Approximately what percent of U.S. power outages are caused by squirrels?',
-        choice1: '10-20%',
-        choice2: '5-10%',
-        choice3: '15-20%',
-        choice4: '30%-40%',
+        question: 'What are callbacks?',
+        choice1: 'When you reference a function',
+        choice2: 'When a bool is set to true or false',
+        choice3: 'When you reference a string variable',
+        choice4: 'A function that will be executed after another function get executed',
+        answer: 4,
+    },
+    {
+        question: 'Explain "this" keyword',
+        choice1: 'Refers to the object that the function is a property of',
+        choice2: 'A general term used to reference booleans',
+        choice3: 'Refers to a for loop',
+        choice4: 'None of the above',
         answer: 1,
     }
 ];
@@ -94,6 +117,9 @@ choices.forEach(choice => {
 
         if(classToApply === 'correct') {
             incrementScore(SCORE_POINTS);
+        }
+        if(classToApply === 'incorrect') {
+            timeSecond -= 5;
         }
 
         selectedChoice.parentElement.classList.add(classToApply);
