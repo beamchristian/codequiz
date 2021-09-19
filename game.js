@@ -4,14 +4,16 @@ const progressText = document.querySelector('#progressText');
 const scoreText = document.querySelector('#score');
 const progressBarFull = document.querySelector('#progressBarFull');
 const timeH = document.querySelector('#timer');
-let timeSecond = 20;
+
 
 let currentQuestion = {};
 let acceptingAnswers = true;
 let score = 0;
 let questionCounter = 0;
 let availableQuestions = [];
+let timeSecond = 30;
 
+// timer code
 displayTime(timeSecond);
 
 const countDown = setInterval (()=> {
@@ -33,6 +35,10 @@ function endTime() {
     localStorage.setItem('mostRecentScore', score)
     return window.location.assign('./end.html')
 }
+
+// end timer code
+
+// questions array that is displayed in "game.html"
 let questions = [
     {
         question: 'What is not a JavaScript Data Type?',
@@ -68,6 +74,7 @@ let questions = [
     }
 ];
 
+// variables for points recieved for each correct answer and max questions
 const SCORE_POINTS = 100;
 const MAX_QUESTIONS = 4;
 
@@ -115,9 +122,11 @@ choices.forEach(choice => {
         let classToApply = selectedAnswer == currentQuestion.answer ? 'correct' :
         'incorrect';
 
+        // correct answer 
         if(classToApply === 'correct') {
             incrementScore(SCORE_POINTS);
         }
+        // incorrect answer
         if(classToApply === 'incorrect') {
             timeSecond -= 5;
         }
